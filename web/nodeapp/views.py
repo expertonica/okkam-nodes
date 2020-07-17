@@ -13,9 +13,9 @@ class GetNodesView(GenericAPIView):
 
     def post(self, request):
         json_data = json.loads(request.body)
-        companies = map_get_nodes(json_data)
+        query, companies = map_get_nodes(json_data)
 
-        nodes = calculate_nodes('жалюзи', companies)
+        nodes = calculate_nodes(query, companies)
         node_list = []
         for N in nodes:
             node_list.append(nodes[N])
