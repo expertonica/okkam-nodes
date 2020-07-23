@@ -4,39 +4,38 @@ from copy import copy
 from operator import itemgetter
 from pprint import pprint
 
-percentages = (0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.15, 0.1, 0.05, 0.025, 0.01)
+percentages = (0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.15,
+               # 0.1, 0.05, 0.025, 0.01
+               )
 
 
-def make_dynamic_bookcase(companies=None, elastic_ids=None):
+def make_dynamic_bookcase(elastic_ids=None):
     """
 
     :type elastic_ids: set of int
     :type companies: list of int
     """
     print('started')
-    if not companies:
-        companies = []
 
-        with open('static_bookcases/companies.txt', 'r') as f:
-            for line in f:
-                line = line.strip()
-                if line:
-                    ss = line.split(',')
-                    companies.append(int(ss[1]))
+    companies = []
 
+    with open('static_bookcases/companies.txt', 'r') as f:
+        for line in f:
+            line = line.strip()
+            if line:
+                ss = line.split(',')
+                companies.append(int(ss[1]))
+
+    if not elastic_ids:
         elastic_ids = set()
         with open('static_bookcases/temp_found_ids.txt', 'r') as f:
-            for line in f:
-                line = line.strip()
-                if line:
-                    ss = line.split(';')
-
-                    elastic_ids.add(int(ss[0]))
+            line = f.read().strip().split(',')
+            elastic_ids.update([int(item) for item in line])
 
     cliques = load_elastic_ids_cliques(elastic_ids)
 
     # save_updated_cliques(cliques)
-    return get_bookcases(cliques, percentages,
+    return get_bookcases(companies, cliques, percentages,
                   elastic_ids
                   )
     # main_2gis_inception(use_bookcase_info=False)
@@ -57,7 +56,7 @@ def make_dynamic_bookcase(companies=None, elastic_ids=None):
 def load_elastic_ids_cliques(elastic_ids):
     # print(elastic_ids)
     cliques = []
-    with open('static_bookcases/bookcases.txt', 'r') as f:
+    with open('static_bookcases/cliques.txt', 'r') as f:
         for line in f:
             line = line.strip()
             if line:
@@ -73,7 +72,7 @@ def load_elastic_ids_cliques(elastic_ids):
     return [item[0] for item in cliques]
 
 
-def get_bookcases(cliques, percentages, elastic_ids=None):
+def get_bookcases(companies, cliques, percentages, elastic_ids=None):
     """
     От самого большого подграфа к самому малому, компании присваивается 2, если она впервые встречается и 1 если она уже встречалась в предыдущих подграфах
     Первый подграф сразу отправляется в новый шкаф.
@@ -127,17 +126,25 @@ def get_bookcases(cliques, percentages, elastic_ids=None):
     # cliques_2 = OrderedDict(sorted(cliques_2.items(), reverse=True, key=lambda x: len(x[1])))
     # print(len(cliques_2))
     dynamic_bookcase_data = []
-    companies_bookcase_history = defaultdict(dict)
-    save_bookcase_history(companies_bookcase_history, cliques_2, 1)
+    # companies_bookcase_history = defaultdict(dict)
+    # save_bookcase_history(companies_bookcase_history, cliques_2, 1)
     for percentage in percentages:
         cliques_2, cycles_done, concats_made = allocate_cliques_recursive(cliques_2, percentage)
 
-        save_bookcase_history(companies_bookcase_history, cliques_2, percentage)
+        # save_bookcase_history(companies_bookcase_history, cliques_2, percentage)
         # cycles_concats_data.append({'percentage': percentage,
         #                             'cycles_done': cycles_done,
         #                             'concats_made': concats_made})
+        pprint(cliques_2)
+        clique_with_elastic_ids = {}
+        for clique_id, clique_items in cliques_2.items():
+            ids_from_elastic = {}
+            for company_id, one_two in clique_items.items():
+                ids_from_elastic[companies[company_id-1]] = one_two
+            clique_with_elastic_ids[clique_id] = ids_from_elastic
+
         dynamic_bookcase_data.append({'percentage': percentage,
-                                      'bookcases': cliques_2,
+                                      'bookcases': clique_with_elastic_ids,
                                       'concats_made': concats_made,
                                       'cycles_done': cycles_done, })
 
@@ -275,7 +282,7 @@ def allocate_cliques_recursive(cliques_2, percentage=0.9):
 
 
 def get_twos_with_elastic(cliques, elastic_ids):
-    cliques_2 = dict()
+    cliques_2 = {}
     counted_companies = set()
     index_of_clique = 0
     for cliq in cliques:

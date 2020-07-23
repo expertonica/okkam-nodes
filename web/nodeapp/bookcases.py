@@ -41,7 +41,7 @@ def load_bookcases(raw_query, companies):
     elastic_ids = set()
     for cid in companies:
         elastic_ids.add(cid)
-    dynamic_bookcases = make_dynamic_bookcase(companies=None, elastic_ids=elastic_ids)
+    dynamic_bookcases = make_dynamic_bookcase( elastic_ids=elastic_ids)
 
     for db in dynamic_bookcases:
         if db['percentage']==0.15:
@@ -66,7 +66,7 @@ def load_bookcases(raw_query, companies):
             break
     print('QQ')
     print(elastic_ids)
-    print(bookcase_query_not_filtered1)
+    print(bookcase_query_not_filtered)
     #print(from .dynamic_bookcases import make_dynamic_bookcase)
 
 
