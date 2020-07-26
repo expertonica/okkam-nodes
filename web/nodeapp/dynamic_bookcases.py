@@ -29,11 +29,18 @@ def make_dynamic_bookcase(elastic_ids=None):
 
                 reverse_company_dict[int(ss[1])] = i
                 i += 1
+
     if not elastic_ids:
         elastic_ids = set()
         with open('static_bookcases/temp_found_ids.txt', 'r') as f:
             line = f.read().strip().split(',')
-            elastic_ids.update([reverse_company_dict[int(item)] for item in line])
+
+            for item in line:
+                try:
+                    elastic_ids.add(reverse_company_dict[int(item)])
+                except KeyError:
+                    pass
+
 
     cliques = load_elastic_ids_cliques(elastic_ids)
 
