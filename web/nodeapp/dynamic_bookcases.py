@@ -18,7 +18,8 @@ def make_dynamic_bookcase(elastic_ids=None):
     print('started')
 
     companies = []
-
+    reverse_company_dict = {}
+    i = 0
     with open('static_bookcases/companies.txt', 'r') as f:
         for line in f:
             line = line.strip()
@@ -26,11 +27,13 @@ def make_dynamic_bookcase(elastic_ids=None):
                 ss = line.split(',')
                 companies.append(int(ss[1]))
 
+                reverse_company_dict[int(ss[1])] = i
+                i += 1
     if not elastic_ids:
         elastic_ids = set()
         with open('static_bookcases/temp_found_ids.txt', 'r') as f:
             line = f.read().strip().split(',')
-            elastic_ids.update([int(item) for item in line])
+            elastic_ids.update([reverse_company_dict[int(item)] for item in line])
 
     cliques = load_elastic_ids_cliques(elastic_ids)
 
