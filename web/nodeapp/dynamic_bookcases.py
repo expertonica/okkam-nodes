@@ -13,13 +13,13 @@ def make_dynamic_bookcase(elastic_ids=None):
     """
 
     :type elastic_ids: set of int
-    :type companies: list of int
+
     """
     print('started')
 
     companies = []
     reverse_company_dict = {}
-    i = 0
+    i = 1
     with open('static_bookcases/companies.txt', 'r') as f:
         for line in f:
             line = line.strip()
