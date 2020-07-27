@@ -29,7 +29,7 @@ def make_dynamic_bookcase(elastic_ids=None):
 
                 reverse_company_dict[int(ss[1])] = i
                 i += 1
-
+    reversed_elastic_ids = set()
     if not elastic_ids:
         elastic_ids = set()
         with open('static_bookcases/temp_found_ids.txt', 'r') as f:
@@ -37,16 +37,24 @@ def make_dynamic_bookcase(elastic_ids=None):
 
             for item in line:
                 try:
-                    elastic_ids.add(reverse_company_dict[int(item)])
+                    reversed_elastic_ids.add(reverse_company_dict[int(item)])
                 except KeyError:
                     pass
+    else:
+
+        for elastic_id in elastic_ids:
+            try:
+                reversed_elastic_ids.add(reverse_company_dict[elastic_id])
+            except KeyError:
+                pass
 
 
-    cliques = load_elastic_ids_cliques(elastic_ids)
+
+    cliques = load_elastic_ids_cliques(reversed_elastic_ids)
 
     # save_updated_cliques(cliques)
     return get_bookcases(companies, cliques, percentages,
-                  elastic_ids
+                  reversed_elastic_ids
                   )
     # main_2gis_inception(use_bookcase_info=False)
     #
@@ -343,4 +351,4 @@ def cliqu_to_str(cliqu):
 
 if __name__ == '__main__':
     # load_elastic_ids_cliques()
-    pprint(make_dynamic_bookcase())
+    pprint(make_dynamic_bookcase(elastic_ids={16395, 32774, 32775}))
