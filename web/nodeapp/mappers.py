@@ -28,7 +28,10 @@ def map_get_nodes(json_data):
         company_id = c_data['company_id']
         top6 = []
         for p_data in c_data['top_6']:
-            qit = query_in_title(m, p_data['title'], query)
+            title = p_data['title']
+            if not title:
+                title = ''
+            qit = query_in_title(m, title, query)
             top6.append(PageTop6Entity(p_data['url'], p_data['es_score'], qit))
         companies[company_id] = CompanyTop6Entity(company_id, top6)
     return query, companies
