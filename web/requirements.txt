@@ -5,3 +5,4 @@ gunicorn
 djangorestframework
 xlrd==1.1.0
 pandas==0.25.3
+pymystem3
