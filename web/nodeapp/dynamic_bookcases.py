@@ -153,7 +153,7 @@ def get_bookcases(companies, cliques, percentages, elastic_ids=None):
         # cycles_concats_data.append({'percentage': percentage,
         #                             'cycles_done': cycles_done,
         #                             'concats_made': concats_made})
-        pprint(cliques_2)
+        #pprint(cliques_2)
         clique_with_elastic_ids = {}
         for clique_id, clique_items in cliques_2.items():
             ids_from_elastic = {}

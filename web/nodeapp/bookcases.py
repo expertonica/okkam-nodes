@@ -80,12 +80,12 @@ def load_bookcases(raw_query, companies):
     for db in dynamic_bookcases:
         if db['percentage']==0.15:
             print('YES')
-            print(db)
+            #print(db)
 
             db_bookcases = db['bookcases']
             for bid in db_bookcases:
                 shelf = db_bookcases[bid]
-                print('shelf'+ str(shelf))
+                #print('shelf'+ str(shelf))
                 for cid in shelf:
                     if cid in companies:
                         #bc_companies[cid]['bookcase_query'] = excel_data_df.iloc[i, 0]
@@ -99,8 +99,8 @@ def load_bookcases(raw_query, companies):
                     bookcase_query_not_filtered[bid] = cc
             break
     print('QQ')
-    print(elastic_ids)
-    print(bookcase_query_not_filtered)
+    #print(elastic_ids)
+    #print(bookcase_query_not_filtered)
     #print(from .dynamic_bookcases import make_dynamic_bookcase)
 
 

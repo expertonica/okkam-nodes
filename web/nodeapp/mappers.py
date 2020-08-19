@@ -3,15 +3,26 @@ from pymystem3 import Mystem
 
 from .entities import CompanyTop6Entity, PageTop6Entity
 
+def lemmatize_str(m, str):
+    str = str.lower().strip()
+    str = re.sub('\W+', ' ', str)
+    lemmas = set(m.lemmatize(str))
+    good_lemmas = []
+    for l in lemmas:
+        l = l.strip()
+        if len(l) >= 2:
+            good_lemmas.append(l)
+    return good_lemmas
 
 def query_in_title(m, title, raw_query):
 
-    query = set(m.lemmatize(raw_query))
+    query = lemmatize_str(m, raw_query)
 
     n = 0
     # TODO убрать лишние слова и прочее из загловка
-    title = re.sub('\W+', ' ', title).strip().lower()
-    lemmas = set(m.lemmatize(title))
+    #title = re.sub('\W+', ' ', title).strip().lower()
+    #lemmas = set(m.lemmatize(title))
+    lemmas = lemmatize_str(m, title)
 
     for q in query:
         if q in lemmas:
@@ -34,4 +45,11 @@ def map_get_nodes(json_data):
             qit = query_in_title(m, title, query)
             top6.append(PageTop6Entity(p_data['url'], p_data['es_score'], qit))
         companies[company_id] = CompanyTop6Entity(company_id, top6)
+        '''
+        if company_id==28294:
+            print('CHECK!!!!')
+            print(vars(companies[company_id]))
+            for page in companies[company_id].top6:
+                print(vars(page))
+        '''
     return query, companies
