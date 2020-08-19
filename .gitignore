@@ -4,6 +4,8 @@
 
 .idea
 web/support/*
+logs
+
 
 ### Django ###
 *.log

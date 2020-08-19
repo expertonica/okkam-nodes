@@ -1,5 +1,5 @@
 import json
-
+import os
 from django.shortcuts import render
 from rest_framework.generics import GenericAPIView
 from rest_framework.views import APIView
@@ -15,6 +15,12 @@ class GetNodesView(APIView):
     def post(self, request):
         json_data = json.loads(request.body)
         query, companies = map_get_nodes(json_data)
+
+        if not os.path.exists('logs'):
+            os.mkdir('logs')
+        logs_fname = os.path.join('logs', query+'.txt')
+        with open(logs_fname, 'w') as f:
+            f.write(str(request.body))
 
         nodes = calculate_nodes(query, companies)
         node_list = []
