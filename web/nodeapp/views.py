@@ -20,7 +20,8 @@ class GetNodesView(APIView):
             os.mkdir('logs')
         logs_fname = os.path.join('logs', query+'.txt')
         with open(logs_fname, 'w') as f:
-            f.write(str(request.body))
+            json_object = json.dumps(json_data, indent=4)
+            f.write(json_object)
 
         nodes = calculate_nodes(query, companies)
         node_list = []
