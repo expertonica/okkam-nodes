@@ -15,7 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from django.conf import settings
 from django.conf.urls import url, include
+from django.conf.urls.static import static
 
 from nodeapp.urls import view_urls
 
@@ -23,4 +25,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     url(r'^', include((view_urls, 'mainapp'), namespace='mainapp')),
 
-]
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT, show_indexes=True)
+

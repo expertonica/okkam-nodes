@@ -1,3 +1,7 @@
+import datetime
+import os
+from xlsxwriter.workbook import Workbook
+from django.conf import settings
 from .bookcases import load_bookcases
 
 
@@ -13,6 +17,31 @@ def get_average_es(companies, common):
     if n == 0:
         return 0
     return s / n
+
+def log_nodes(query, nodes):
+    now = datetime.datetime.now()
+    fname = query+'_'+str(now.year) + '_' + str(now.month) + '_' + str(now.day) + '_' + str(now.hour) + '_' + str(
+        now.minute) + '_' + str(now.second)+'.xls'
+
+    book = Workbook( os.path.join('media_root', fname))
+    sheet = book.add_worksheet('test')
+    sheet.write(0, 0, 'cid')
+    sheet.write(0, 1, 'node')
+    sheet.write(0, 2, 'score')
+
+    row = 1
+
+    for nid in range(len(nodes)):
+        node = nodes[nid]
+        for cid in node['common']:
+            sheet.write(row, 0, cid)
+            sheet.write(row, 1, nid)
+            sheet.write(row, 2, node['score'])
+            row+=1
+
+    book.close()
+
+    pass
 
 def get_node( bookcase_classic, bookcase_classic_not_filtered, bookcase_query, companies, bc_classic,
              bc_query):
@@ -61,6 +90,9 @@ def calculate_nodes(query, companies):
                 node['node_id'] = n
                 nodes[n] = node
                 n += 1
+
+    if settings.SHOULD_LOG_RESULTS:
+        log_nodes(query, nodes)
 
     return nodes
 
