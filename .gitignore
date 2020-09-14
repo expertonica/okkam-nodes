@@ -6,6 +6,7 @@
 web/support/*
 logs
 temp
+*.xls
 
 
 ### Django ###
