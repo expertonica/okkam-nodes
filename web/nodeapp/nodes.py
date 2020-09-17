@@ -29,6 +29,11 @@ def log_nodes(query, companies, nodes):
     sheet.write(0, 1, 'node')
     sheet.write(0, 2, 'score')
     sheet.write(0, 3, 'link')
+    sheet.write(0, 4, 'bookcase_static')
+    sheet.write(0, 5, 'bookcase_dynamic')
+    sheet.write(0, 6, 'L')
+    sheet.write(0, 7, 'R')
+    sheet.write(0, 8, 'aver_es')
 
     row = 1
 
@@ -41,6 +46,11 @@ def log_nodes(query, companies, nodes):
             sheet.write(row, 1, nid)
             sheet.write(row, 2, node['score'])
             sheet.write(row, 3, companies[cid].get_link())
+            sheet.write(row, 4, node['bc_classic'])
+            sheet.write(row, 5, node['bc_query'])
+            sheet.write(row, 6, node['L'])
+            sheet.write(row, 7, node['R'])
+            sheet.write(row, 8, node['aver_es'])
 
             row+=1
 
@@ -50,6 +60,11 @@ def log_nodes(query, companies, nodes):
             sheet.write(row, 1, -1)
             sheet.write(row, 2, -1)
             sheet.write(row, 3, companies[cid].get_link())
+            sheet.write(row, 4, -1)
+            sheet.write(row, 5, -1)
+            sheet.write(row, 6, -1)
+            sheet.write(row, 7, -1)
+            sheet.write(row, 8, -1)
             row+=1
 
     book.close()
