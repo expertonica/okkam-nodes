@@ -1,5 +1,6 @@
 import json
 import os
+import glob
 from django.shortcuts import render
 from rest_framework.generics import GenericAPIView
 from rest_framework.views import APIView
@@ -29,3 +30,15 @@ class GetNodesView(APIView):
             node_list.append(nodes[N])
 
         return Response({'nodes': node_list})
+
+class LogsView(APIView):
+    def get(self, request):
+        search_dir = "media_root/"
+        files = list(filter(os.path.isfile, glob.glob(search_dir + "*")))
+        files.sort(key=lambda x: os.path.getmtime(x), reverse=True)
+        for i in range(len(files)):
+            files[i] = files[i].replace('media_root/', '')
+
+        return render(request, 'index.html', {
+            'files': files
+        })
