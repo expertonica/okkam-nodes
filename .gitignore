@@ -8,6 +8,9 @@ logs
 temp
 *.xls
 
+site_list.csv
+logs.txt
+
 
 ### Django ###
 *.log
