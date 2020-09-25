@@ -41,7 +41,6 @@ class Command(BaseCommand):
                 f.write(str(ex)+'\r\n')
                 f.write('**************' + '\r\n')
                 f.close()
-            break
 
 
     def transfer_one_company(self, cid, company_url):
