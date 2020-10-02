@@ -8,6 +8,7 @@ from rest_framework.response import Response
 
 from .mappers import map_get_nodes
 from .nodes import calculate_nodes
+from .mask import create_mask
 
 class GetNodesView(APIView):
     def get(self, request):
@@ -29,7 +30,9 @@ class GetNodesView(APIView):
         for N in nodes:
             node_list.append(nodes[N])
 
-        return Response({'nodes': node_list})
+        a = create_mask(query, nodes, companies)
+        return Response({'nodes': a})
+        #return Response({'nodes': node_list})
 
 class LogsView(APIView):
     def get(self, request):
