@@ -120,7 +120,7 @@ USE_L10N = True
 USE_TZ = True
 
 
-USE_MASK = os.getenv('USE_MASK', 0) == 1
+USE_MASK = os.getenv('USE_MASK', '0') == '1'
 
 
 # Static files (CSS, JavaScript, Images)
