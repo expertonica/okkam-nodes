@@ -173,7 +173,8 @@ def create_mask(query, nodes, companies):
             col = NODE_START_COLUMN
             for nid in node_keys:
                 M, real_words = calc_M(all_masks[nid], word_counters[cid], WORD_LIMITS[i])
-                sheet.write(row, col, str(real_words)+' '+str(M))
+                if M:
+                    sheet.write(row, col, M)
                 col+=1
 
 
