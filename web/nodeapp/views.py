@@ -5,6 +5,7 @@ from django.shortcuts import render
 from rest_framework.generics import GenericAPIView
 from rest_framework.views import APIView
 from rest_framework.response import Response
+from django.conf import settings
 
 from .mappers import map_get_nodes
 from .nodes import calculate_nodes
@@ -30,9 +31,10 @@ class GetNodesView(APIView):
         for N in nodes:
             node_list.append(nodes[N])
 
-        a = create_mask(query, nodes, companies)
-        return Response({'nodes': a})
-        #return Response({'nodes': node_list})
+        if settings.USE_MASK:
+            a = create_mask(query, nodes, companies)
+        #return Response({'nodes': a})
+        return Response({'nodes': node_list})
 
 class LogsView(APIView):
     def get(self, request):

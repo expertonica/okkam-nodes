@@ -46,7 +46,6 @@ def get_wc_for_company(company, db_urls):
 
     new_wc = { w: wc[w]  for w in words}
 
-    #TODO: weights
     summ = sum(list(new_wc.values()))
     if summ==0:
         summ = 1
