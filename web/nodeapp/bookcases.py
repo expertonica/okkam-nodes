@@ -87,6 +87,8 @@ def load_bookcases(raw_query, companies):
                 shelf = db_bookcases[bid]
                 #print('shelf'+ str(shelf))
                 for cid in shelf:
+                    if shelf[cid]!='2':
+                        continue
                     if cid in companies:
                         #bc_companies[cid]['bookcase_query'] = excel_data_df.iloc[i, 0]
 

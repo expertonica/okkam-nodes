@@ -11,7 +11,8 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         print('MONGO TO POSTGRESS')
 
-        self.transfer_all()
+        self.test()
+        #self.transfer_all()
         #self.transfer_one_company(11496)
 
     def transfer_all(self):
@@ -56,6 +57,11 @@ class Command(BaseCommand):
             url_decoded = url.replace('%60', '.').replace('`', '.')
             url_wc = UrlWc(url=url_decoded, company_id=cid, company_url=company_url, word_counter=mongo_company[url])
             url_wc.save()
+
+    def test(self):
+        db = MongoDatabase()
+        mongo_company = db.get_rd(27649)[2]
+        print(mongo_company)
 
 
 class MongoDatabase:
