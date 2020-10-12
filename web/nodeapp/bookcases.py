@@ -11,6 +11,40 @@ def load_bookcases(raw_query, companies):
     bookcase_query = {}
     bookcase_classic_not_filtered = {}
     bookcase_query_not_filtered = {}
+
+    id_translation = {}
+
+    with open('static_bookcases/companies.txt', 'r') as f:
+        for line in f:
+            line = line.strip()
+            if line:
+                ss = line.split(',')
+                id_translation[int(ss[0])] = int(ss[1])
+
+    data = pd.read_csv("static_bookcases/shelves.csv", delimiter=";")
+    for i in range(data.shape[0]):
+        bc = int(data.iloc[i, 0])
+        #print('bccc')
+        dccc = data.iloc[i, 4]
+        dcc = dccc.split(' ')
+        for c in dcc:
+            if '(2)' in c:
+                ncid = int(c.split('(')[0])
+                cid = id_translation[ncid]
+
+                #print(str(ncid)+':'+str(cid))
+                if cid in companies:
+                    cc = bookcase_classic.get(bc, [])
+                    cc.append(cid)
+                    bookcase_classic[bc] = cc
+
+                cc = bookcase_classic_not_filtered.get(bc, [])
+                cc.append(cid)
+                bookcase_classic_not_filtered[bc] = cc
+
+
+
+    '''
     fname_classic = os.path.join('support', 'node', 'shelve_classic.xlsx')
     excel_data_df = pd.read_excel(fname_classic, sheet_name=0)
     for i in range(excel_data_df.shape[0]):
@@ -37,24 +71,26 @@ def load_bookcases(raw_query, companies):
         cc = bookcase_classic_not_filtered.get(bc, [])
         cc.append(cid)
         bookcase_classic_not_filtered[bc] = cc
-
+    '''
     elastic_ids = set()
     for cid in companies:
         elastic_ids.add(cid)
     dynamic_bookcases = make_dynamic_bookcase( elastic_ids=elastic_ids)
-
+    print('dynamic')
     for db in dynamic_bookcases:
         if db['percentage']==0.15:
             print('YES')
-            print(db)
+            #print(db)
 
             db_bookcases = db['bookcases']
             for bid in db_bookcases:
                 shelf = db_bookcases[bid]
-                print(shelf)
+                #print('shelf'+ str(shelf))
                 for cid in shelf:
+                    if shelf[cid]!='2':
+                        continue
                     if cid in companies:
-                        bc_companies[cid]['bookcase_query'] = excel_data_df.iloc[i, 0]
+                        #bc_companies[cid]['bookcase_query'] = excel_data_df.iloc[i, 0]
 
                         cc = bookcase_query.get(bid, [])
                         cc.append(cid)
@@ -65,8 +101,8 @@ def load_bookcases(raw_query, companies):
                     bookcase_query_not_filtered[bid] = cc
             break
     print('QQ')
-    print(elastic_ids)
-    print(bookcase_query_not_filtered)
+    #print(elastic_ids)
+    #print(bookcase_query_not_filtered)
     #print(from .dynamic_bookcases import make_dynamic_bookcase)
 
 

@@ -13,6 +13,11 @@ class CompanyTop6Entity:
                 titles_with_query += 1
         return titles_with_query
 
+    def get_link(self):
+        if len(self.top6) == 0:
+            return ''
+        return self.top6[0].url
+
 class PageTop6Entity:
     def __init__(self, url, es_score, query_in_title):
         self.url = url

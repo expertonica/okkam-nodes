@@ -13,12 +13,13 @@ def make_dynamic_bookcase(elastic_ids=None):
     """
 
     :type elastic_ids: set of int
-    :type companies: list of int
+
     """
     print('started')
 
     companies = []
-
+    reverse_company_dict = {}
+    i = 1
     with open('static_bookcases/companies.txt', 'r') as f:
         for line in f:
             line = line.strip()
@@ -26,17 +27,34 @@ def make_dynamic_bookcase(elastic_ids=None):
                 ss = line.split(',')
                 companies.append(int(ss[1]))
 
+                reverse_company_dict[int(ss[1])] = i
+                i += 1
+    reversed_elastic_ids = set()
     if not elastic_ids:
         elastic_ids = set()
         with open('static_bookcases/temp_found_ids.txt', 'r') as f:
             line = f.read().strip().split(',')
-            elastic_ids.update([int(item) for item in line])
 
-    cliques = load_elastic_ids_cliques(elastic_ids)
+            for item in line:
+                try:
+                    reversed_elastic_ids.add(reverse_company_dict[int(item)])
+                except KeyError:
+                    pass
+    else:
+
+        for elastic_id in elastic_ids:
+            try:
+                reversed_elastic_ids.add(reverse_company_dict[elastic_id])
+            except KeyError:
+                pass
+
+
+
+    cliques = load_elastic_ids_cliques(reversed_elastic_ids)
 
     # save_updated_cliques(cliques)
     return get_bookcases(companies, cliques, percentages,
-                  elastic_ids
+                  reversed_elastic_ids
                   )
     # main_2gis_inception(use_bookcase_info=False)
     #
@@ -135,7 +153,7 @@ def get_bookcases(companies, cliques, percentages, elastic_ids=None):
         # cycles_concats_data.append({'percentage': percentage,
         #                             'cycles_done': cycles_done,
         #                             'concats_made': concats_made})
-        pprint(cliques_2)
+        #pprint(cliques_2)
         clique_with_elastic_ids = {}
         for clique_id, clique_items in cliques_2.items():
             ids_from_elastic = {}
@@ -333,4 +351,4 @@ def cliqu_to_str(cliqu):
 
 if __name__ == '__main__':
     # load_elastic_ids_cliques()
-    pprint(make_dynamic_bookcase())
+    pprint(make_dynamic_bookcase(elastic_ids={16395, 32774, 32775}))

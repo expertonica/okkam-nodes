@@ -2,6 +2,8 @@ version: '3'
 
 services:
   web:
+    env_file:
+      - ./.env
     build:
       context: ./web
       dockerfile: Dockerfile
@@ -9,4 +11,4 @@ services:
     volumes:
       - ./web:/opt/app
     ports:
-      - "80:80"
+      - "8001:80"

@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+    {% for f in files %}
+    <a href="/media/{{f}}">{{f}}</a>
+        <br>
+    {% endfor %}
+
+{% endblock %}
+
