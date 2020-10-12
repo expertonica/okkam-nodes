@@ -78,7 +78,7 @@ def load_bookcases(raw_query, companies):
     dynamic_bookcases = make_dynamic_bookcase( elastic_ids=elastic_ids)
     print('dynamic')
     for db in dynamic_bookcases:
-        if db['percentage']==0.15:
+        if db['percentage']==0.2:
             print('YES')
             #print(db)
 
