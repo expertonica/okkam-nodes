@@ -34,6 +34,8 @@ def log_nodes(query, companies, nodes):
     sheet.write(0, 6, 'L')
     sheet.write(0, 7, 'R')
     sheet.write(0, 8, 'aver_es')
+    sheet.write(0, 9, 'aver_es_company')
+    sheet.write(0, 10, 'title_score')
 
     row = 1
 
@@ -51,6 +53,8 @@ def log_nodes(query, companies, nodes):
             sheet.write(row, 6, node['L'])
             sheet.write(row, 7, node['R'])
             sheet.write(row, 8, node['aver_es'])
+            sheet.write(row, 9, companies[cid].aver_es)
+            sheet.write(row, 10, companies[cid].title_score)
 
             row+=1
 
@@ -65,6 +69,8 @@ def log_nodes(query, companies, nodes):
             sheet.write(row, 6, -1)
             sheet.write(row, 7, -1)
             sheet.write(row, 8, -1)
+            sheet.write(row, 9, companies[cid].aver_es)
+            sheet.write(row, 10, companies[cid].title_score)
             row+=1
 
     book.close()
@@ -83,6 +89,9 @@ def get_node( bookcase_classic, bookcase_classic_not_filtered, bookcase_query, c
     common_not_filtered = set(bcid_classic).intersection(set(bcid_query))
     common = set()
     for cid in common_not_filtered:
+        if cid==37494:
+            print('FOUND CID 37494')
+            print(companies[cid].titles_with_query)
         if companies[cid].titles_with_query > 0:
             common.add(cid)
             aver_titles += companies[cid].titles_with_query

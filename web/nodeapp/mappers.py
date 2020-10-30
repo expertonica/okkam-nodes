@@ -25,6 +25,9 @@ def query_in_title(m, title, raw_query):
     #lemmas = set(m.lemmatize(title))
     lemmas = lemmatize_str(m, title)
 
+    print(query)
+    print(lemmas)
+
     for q in query:
         if q in lemmas:
             n += 1
