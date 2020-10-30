@@ -6,7 +6,12 @@ class CompanyTop6Entity:
         self.top6 = top6
         self.aver_es = self.calc_aver_es(self.top6)
         self.title_score = self.calc_title_score(self.top6)
+        self.all_titles = self.get_all_titles(self.top6)
         self.titles_with_query = self.count_titles_with_query(self.top6)
+
+    def get_all_titles(self, top6):
+        ss = [p_data.title for p_data in top6]
+        return '|'.join(ss)
 
     def calc_aver_es(self, top6):
         ss = 0
@@ -43,7 +48,8 @@ class CompanyTop6Entity:
         return self.top6[0].url
 
 class PageTop6Entity:
-    def __init__(self, url, es_score, query_in_title):
+    def __init__(self, url, es_score, title, query_in_title):
         self.url = url
+        self.title = title
         self.es_score = es_score
         self.query_in_title = query_in_title

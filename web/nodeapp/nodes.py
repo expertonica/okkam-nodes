@@ -36,6 +36,7 @@ def log_nodes(query, companies, nodes):
     sheet.write(0, 8, 'aver_es')
     sheet.write(0, 9, 'aver_es_company')
     sheet.write(0, 10, 'title_score')
+    sheet.write(0, 11, 'titles')
 
     row = 1
 
@@ -55,6 +56,7 @@ def log_nodes(query, companies, nodes):
             sheet.write(row, 8, node['aver_es'])
             sheet.write(row, 9, companies[cid].aver_es)
             sheet.write(row, 10, companies[cid].title_score)
+            sheet.write(row, 11, companies[cid].all_titles)
 
             row+=1
 
@@ -71,6 +73,7 @@ def log_nodes(query, companies, nodes):
             sheet.write(row, 8, -1)
             sheet.write(row, 9, companies[cid].aver_es)
             sheet.write(row, 10, companies[cid].title_score)
+            sheet.write(row, 11, companies[cid].all_titles)
             row+=1
 
     book.close()

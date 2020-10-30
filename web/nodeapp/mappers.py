@@ -73,7 +73,7 @@ def map_get_nodes(json_data):
             if not title:
                 title = ''
             qit = query_in_title(m, title, query)
-            top6.append(PageTop6Entity(remove_last_slash(p_data['url']), p_data['es_score'], qit))
+            top6.append(PageTop6Entity(remove_last_slash(p_data['url']), p_data['es_score'], title, qit))
         companies[company_id] = CompanyTop6Entity(company_id, top6)
         '''
         if company_id==28294:
