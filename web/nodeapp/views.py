@@ -10,6 +10,7 @@ from django.conf import settings
 from .mappers import map_get_nodes
 from .nodes import calculate_nodes
 from .mask import create_mask
+from .helpers import log_json_data
 
 class GetNodesView(APIView):
     def get(self, request):
@@ -17,7 +18,10 @@ class GetNodesView(APIView):
 
     def post(self, request):
         json_data = json.loads(request.body)
+
         query, companies = map_get_nodes(json_data)
+
+        log_json_data(query, json_data)
 
         if not os.path.exists('logs'):
             os.mkdir('logs')
